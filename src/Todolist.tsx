@@ -11,7 +11,7 @@ export type TaskType = {
     isDone: boolean
 }
 
-type TodolistPropsType = {
+export type TodolistPropsType = {
     title: string
     tasks: Array<TaskType>
     removeTask: (taskId: string, todoListID: string) => void
