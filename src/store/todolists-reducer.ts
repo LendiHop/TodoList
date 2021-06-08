@@ -26,23 +26,30 @@ type ChangeTodoListFilterAT = {
 
 export type ActionUnionType = RemoveTodoListAT | AddTodoListAT | ChangeTodoListTitleAT | ChangeTodoListFilterAT;
 
-export const todoListsReducer = (todoLists: Array<TodoListType>, action: ActionUnionType): Array<TodoListType> => {
+export const todoListID_1 = v1(), todoListID_2 = v1();
+
+const initialState: Array<TodoListType> = [
+    {id: todoListID_1, title: "What to learn", filter: "all"},
+    {id: todoListID_2, title: "What to buy", filter: "all"},
+];
+
+export const todoListsReducer = (state: Array<TodoListType> = initialState, action: ActionUnionType): Array<TodoListType> => {
     switch (action.type) {
         case "REMOVE-TODOLIST":
-            return todoLists.filter(tl => tl.id !== action.todoListID);
+            return state.filter(tl => tl.id !== action.todoListID);
         case "ADD-TODOLIST":
             const newTodoList: TodoListType = {
                 id: action.todoListId,
                 title: action.title,
                 filter: "all"
             };
-            return [...todoLists, newTodoList];
+            return [newTodoList, ...state];
         case "CHANGE-TODOLIST-TITLE":
-            return todoLists.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl);
+            return state.map(tl => tl.id === action.todoListID ? {...tl, title: action.title} : tl);
         case "CHANGE-TODOLIST-FILTER":
-            return todoLists.map(tl => tl.id === action.todoListID ? {...tl, filter: action.filter} : tl);
+            return state.map(tl => tl.id === action.todoListID ? {...tl, filter: action.filter} : tl);
         default:
-            return todoLists;
+            return state;
     }
 }
 
@@ -69,7 +76,7 @@ export const changeTodoListTitleAC = (todoListID: string, title: string): Change
     }
 }
 
-export const changeTodoListFilterAC = (todoListID: string, filter: FilterValuesType): ChangeTodoListFilterAT => {
+export const changeTodoListFilterAC = (filter: FilterValuesType, todoListID: string): ChangeTodoListFilterAT => {
     return {
         type: 'CHANGE-TODOLIST-FILTER',
         todoListID: todoListID,

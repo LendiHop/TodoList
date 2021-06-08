@@ -1,9 +1,9 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent} from 'react';
 import {FilterValuesType} from './App';
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, Checkbox, IconButton} from "@material-ui/core";
-import {CheckBox, Delete} from "@material-ui/icons";
+import {Delete} from "@material-ui/icons";
 
 export type TaskType = {
     id: string
@@ -35,11 +35,11 @@ export function Todolist(props: TodolistPropsType) {
 
     const addTask = (title: string) => props.addTask(title, props.todoListID);
 
-    const changeTodoListTilte = (title: string) => props.changeTodoListTitle(title, props.todoListID);
+    const changeTodoListTitle = (title: string) => props.changeTodoListTitle(title, props.todoListID);
 
     return <div>
         <h3>
-            <EditableSpan title={props.title} changeTitle={changeTodoListTilte}/>
+            <EditableSpan title={props.title} changeTitle={changeTodoListTitle}/>
             <IconButton onClick={onClickRemoveTodoList}>
                 <Delete/>
             </IconButton>
