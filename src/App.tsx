@@ -38,8 +38,6 @@ function App() {
         ]
     });
 
-    let [filter, setFilter] = useState<FilterValuesType>("all");
-
     function removeTask(taskID: string, todoListID: string) {
         tasks[todoListID] = tasks[todoListID].filter(t => t.id !== taskID);
         setTasks({...tasks});

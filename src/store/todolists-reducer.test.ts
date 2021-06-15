@@ -51,7 +51,7 @@ test('correct todolist should change its name', () => {
         {id: todolistId2, title: "What to buy", filter: "all"}
     ]
 
-    const action: ActionUnionType = changeTodoListTitleAC(todolistId2, newTodolistTitle);
+    const action: ActionUnionType = changeTodoListTitleAC(newTodolistTitle, todolistId2);
 
     const endState = todoListsReducer(startState, action);
 
