@@ -1,15 +1,23 @@
 import React from 'react'
-import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
-import {useFormik} from 'formik'
-import {useDispatch, useSelector} from 'react-redux'
-import {loginTC} from './auth-reducer'
-import {AppRootStateType} from '../../app/store'
-import { Redirect } from 'react-router-dom'
+import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from '@material-ui/core'
+import {FormikHelpers, useFormik} from 'formik'
+import {useSelector} from 'react-redux'
+import {login} from './auth-reducer'
+import {Redirect} from 'react-router-dom'
+import {selectIsLoggedIn} from './selectors'
+import {authActions} from './index'
+import {useAppDispatch} from '../../utils/redux-utils'
+
+type FormValuesType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
 
 export const Login = () => {
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     const formik = useFormik({
         validate: (values) => {
@@ -30,13 +38,20 @@ export const Login = () => {
             password: '',
             rememberMe: false
         },
-        onSubmit: values => {
-            dispatch(loginTC(values));
+        onSubmit: async (values: FormValuesType, formikHelpers: FormikHelpers<FormValuesType>) => {
+            const resultAction = await dispatch(authActions.login(values));
+
+            if (login.rejected.match(resultAction)) {
+                if (resultAction.payload?.fieldsErrors?.length) {
+                    const error = resultAction.payload?.fieldsErrors[0];
+                    formikHelpers.setFieldError(error.field, error.error);
+                }
+            }
         },
     })
 
     if (isLoggedIn) {
-        return <Redirect to={"/"} />
+        return <Redirect to={"/"}/>
     }
 
 
@@ -45,18 +60,9 @@ export const Login = () => {
             <form onSubmit={formik.handleSubmit}>
                 <FormControl>
                     <FormLabel>
-                        <p>
-                            To log in get registered <a href={'https://social-network.samuraijs.com/'}
-                                                        target={'_blank'}>here</a>
-                        </p>
-                        <p>
-                            or use common test account credentials:
-                        </p>
-                        <p> Email: free@samuraijs.com
-                        </p>
-                        <p>
-                            Password: free
-                        </p>
+                        <p>You can log in using common test account credentials:</p>
+                        <p>Email: free@samuraijs.com</p>
+                        <p>Password: free</p>
                     </FormLabel>
                     <FormGroup>
                         <TextField

@@ -1,7 +1,8 @@
 {
-  "name": "it-incubator-todolist-ts",
+  "name": "todolist",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://LendiHop.github.io/TodoList",
   "dependencies": {
     "@material-ui/core": "^4.10.1",
     "@material-ui/icons": "^4.9.1",
@@ -34,10 +35,13 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9009 -s public --no-dll",
+    "storybook-debug": "start-storybook -p 9009 -s public --no-dll",
+    "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "jest:integration": "jest -c integration/jest.config.js",
-    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration"
+    "test:integration": "start-server-and-test storybook http-get://localhost:9009 jest:integration",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -61,9 +65,12 @@
     "@storybook/addons": "^5.3.19",
     "@storybook/preset-create-react-app": "^3.1.3",
     "@storybook/react": "^5.3.19",
+    "@types/storybook-react-router": "^1.0.1",
+    "gh-pages": "^3.2.3",
     "jest-image-snapshot": "^4.0.2",
     "jest-puppeteer": "^4.4.0",
     "puppeteer": "^5.1.0",
-    "start-server-and-test": "^1.11.2"
+    "start-server-and-test": "^1.11.2",
+    "storybook-react-router": "^1.0.8"
   }
 }
