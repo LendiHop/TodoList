@@ -55,16 +55,16 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         return <Redirect to={'/login'}/>
     }
     return <>
-        <Grid container style={{padding: '20px'}}>
+        <Grid container style={{padding: '20px'}} justify='center'>
             <AddItemForm addItem={addTodolistCallback}/>
         </Grid>
-        <Grid container spacing={3} style={{flexWrap: 'nowrap', overflowX: 'scroll'}}>
+        <Grid container spacing={3} justify='center'>
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id]
 
                     return <Grid item key={tl.id}>
-                        <div style={{width: '300px'}}>
+                        <div style={{width: '290px'}}>
                             <Todolist
                                 todolist={tl}
                                 tasks={allTodolistTasks}
