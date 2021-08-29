@@ -5,12 +5,12 @@ import {
     Button,
     CircularProgress,
     Container,
-    IconButton,
+    createStyles,
     LinearProgress,
+    makeStyles,
     Toolbar,
     Typography
 } from '@material-ui/core'
-import {Menu} from '@material-ui/icons'
 import {TodolistsList} from '../features/TodolistsList'
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {useSelector} from 'react-redux'
@@ -20,52 +20,52 @@ import {authActions, authSelectors, Login} from '../features/Auth'
 import {selectIsInitialized, selectStatus} from '../features/Application/selectors'
 import {useActions} from '../utils/redux-utils'
 
-type PropsType = {
-    demo?: boolean
-}
+const useStyles = makeStyles(() =>
+    createStyles({
+        title: {
+            flexGrow: 1,
+        },
+    }),
+);
 
-function App({demo = false}: PropsType) {
+function App() {
+    const classes = useStyles();
     const status = useSelector(selectStatus)
     const isInitialized = useSelector(selectIsInitialized)
     const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
 
     const {logout} = useActions(authActions)
     const {initializeApp} = useActions(appActions)
-
     useEffect(() => {
-        if (!demo) {
+        if (!isInitialized) {
             initializeApp()
         }
-    }, [])
+    }, []);
 
     const logoutHandler = useCallback(() => {
         logout()
     }, [])
-
     if (!isInitialized) {
         return <div
             style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
             <CircularProgress/>
         </div>
     }
-
     return (
         <div className="App">
             <ErrorSnackbar/>
             <AppBar position="static">
                 <Toolbar>
-                    <IconButton edge="start" color="inherit" aria-label="menu">
-                        <Menu/>
-                    </IconButton>
-                    <Typography variant="h6">
-                        News
+                    <Typography variant="h6" className={classes.title}>
+                        Todolist
                     </Typography>
-                    {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
+                    {isLoggedIn &&
+                    <Button variant="outlined" color="secondary" onClick={logoutHandler}>Log out</Button>}
                 </Toolbar>
-                {status === 'loading' && <LinearProgress/>}
+                {status === 'loading' && <LinearProgress color="secondary"/>}
             </AppBar>
             <Container fixed>
-                <Route exact path={'/'} render={() => <TodolistsList demo={demo}/>}/>
+                <Route exact path={'/'} render={() => <TodolistsList demo={false}/>}/>
                 <Route path={'/login'} render={() => <Login/>}/>
             </Container>
         </div>

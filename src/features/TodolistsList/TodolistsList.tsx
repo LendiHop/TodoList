@@ -2,12 +2,12 @@ import React, {useCallback, useEffect} from 'react'
 import {useSelector} from 'react-redux'
 import {TodolistDomainType} from './todolists-reducer'
 import {TasksStateType} from './tasks-reducer'
-import {Grid, Paper} from '@material-ui/core'
+import {Grid} from '@material-ui/core'
 import {AddItemForm, AddItemFormSubmitHelperType} from '../../components/AddItemForm/AddItemForm'
 import {Todolist} from './Todolist/Todolist'
 import {Redirect} from 'react-router-dom'
 import {selectIsLoggedIn} from '../Auth/selectors'
-import {tasksActions, todolistsActions} from './index'
+import {todolistsActions} from './index'
 import {AppRootStateType} from '../../utils/types'
 import {useActions, useAppDispatch} from '../../utils/redux-utils'
 
@@ -22,7 +22,7 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
 
     const dispatch = useAppDispatch()
 
-    const {fetchTodolistsTC, addTodolistTC} = useActions(todolistsActions)
+    const {fetchTodolistsTC} = useActions(todolistsActions)
 
     const addTodolistCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
         let thunk = todolistsActions.addTodolistTC(title)
@@ -45,14 +45,15 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         if (demo || !isLoggedIn) {
             return
         }
-        fetchTodolistsTC()
+        if (!todolists.length) {
+            fetchTodolistsTC()
+        }
     }, [])
 
 
     if (!isLoggedIn) {
         return <Redirect to={'/login'}/>
     }
-
     return <>
         <Grid container style={{padding: '20px'}}>
             <AddItemForm addItem={addTodolistCallback}/>

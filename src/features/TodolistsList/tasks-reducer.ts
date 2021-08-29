@@ -5,6 +5,7 @@ import {handleAsyncServerAppError, handleAsyncServerNetworkError} from '../../ut
 import {asyncActions as asyncTodolistsActions} from './todolists-reducer'
 import {AppRootStateType, ThunkError} from '../../utils/types'
 import {TaskPriorities, TaskStatuses, TaskType, UpdateTaskModelType} from '../../api/types'
+import {authActions} from "../Auth";
 
 const initialState: TasksStateType = {}
 
@@ -21,7 +22,7 @@ export const fetchTasks = createAsyncThunk<{ tasks: TaskType[], todolistId: stri
 })
 export const removeTask = createAsyncThunk<{ taskId: string, todolistId: string }, { taskId: string, todolistId: string }, ThunkError>('tasks/removeTask',
     async (param, thunkAPI) => {
-        const res = await todolistsAPI.deleteTask(param.todolistId, param.taskId)
+        await todolistsAPI.deleteTask(param.todolistId, param.taskId)
         return {taskId: param.taskId, todolistId: param.todolistId}
     })
 export const addTask = createAsyncThunk<TaskType, { title: string, todolistId: string }, ThunkError>('tasks/addTask',
@@ -114,6 +115,9 @@ export const slice = createSlice({
                 if (index > -1) {
                     tasks[index] = {...tasks[index], ...action.payload.model}
                 }
+            })
+            .addCase(authActions.logout.fulfilled, (state) => {
+                Object.keys(state).map(key => delete state[key])
             })
     }
 })

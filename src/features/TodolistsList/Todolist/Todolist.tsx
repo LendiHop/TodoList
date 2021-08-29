@@ -25,7 +25,9 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         if (demo) {
             return
         }
-        fetchTasks(props.todolist.id)
+        if (!props.tasks.length) {
+            fetchTasks(props.todolist.id)
+        }
     }, [])
 
     const addTaskCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
@@ -84,7 +86,7 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
         >
             <Delete fontSize={'small'}/>
         </IconButton>
-        <h3>
+        <h3 style={{wordWrap: 'break-word'}}>
             <EditableSpan value={props.todolist.title} onChange={changeTodolistTitle}/>
         </h3>
         <AddItemForm addItem={addTaskCallback} disabled={props.todolist.entityStatus === 'loading'}/>
@@ -92,7 +94,7 @@ export const Todolist = React.memo(function ({demo = false, ...props}: PropsType
             {
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.todolist.id}/>)
             }
-            {!tasksForTodolist.length && <div style={{padding: '10px', color: 'grey'}}>No task</div>}
+            {!tasksForTodolist.length && <div style={{padding: '10px', color: 'grey'}}>No tasks</div>}
         </div>
         <div style={{paddingTop: '10px'}}>
             {renderFilterButton('all', 'default', 'All')}
