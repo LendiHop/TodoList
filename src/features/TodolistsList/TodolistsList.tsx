@@ -10,6 +10,8 @@ import {selectIsLoggedIn} from '../Auth/selectors'
 import {todolistsActions} from './index'
 import {AppRootStateType} from '../../utils/types'
 import {useActions, useAppDispatch} from '../../utils/redux-utils'
+import Masonry from 'react-masonry-css'
+import './TodolistsList.css'
 
 type PropsType = {
     demo?: boolean
@@ -40,6 +42,12 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         }
     }, [])
 
+    const breakpoints = {
+        default: 4,
+        1400: 3,
+        1100: 2,
+        700: 1,
+    }
 
     useEffect(() => {
         if (demo || !isLoggedIn) {
@@ -58,12 +66,16 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         <Grid container style={{padding: '20px'}} justify='center'>
             <AddItemForm addItem={addTodolistCallback}/>
         </Grid>
-        <Grid container spacing={3} justify='center'>
+        <Masonry
+            breakpointCols={breakpoints}
+            className="my-masonry-grid"
+            columnClassName="my-masonry-grid_column"
+        >
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id]
 
-                    return <Grid item key={tl.id}>
+                    return <div key={tl.id}>
                         <div style={{width: '290px'}}>
                             <Todolist
                                 todolist={tl}
@@ -71,9 +83,9 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
                                 demo={demo}
                             />
                         </div>
-                    </Grid>
+                    </div>
                 })
             }
-        </Grid>
+        </Masonry>
     </>
 }

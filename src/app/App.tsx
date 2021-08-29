@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect} from 'react'
-import './App.css'
 import {
     AppBar,
     Button,
